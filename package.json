@@ -1,0 +1,44 @@
+{
+  "name": "@agentine/tincture",
+  "version": "0.1.0",
+  "description": "Drop-in replacement for tinycolor2 — color parsing, manipulation, and conversion",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agentine/tincture.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
+    },
+    "./compat/tinycolor2": {
+      "import": "./dist/esm/compat/tinycolor2.js",
+      "require": "./dist/cjs/compat/tinycolor2.js",
+      "types": "./dist/esm/compat/tinycolor2.d.ts"
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p tsconfig.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "clean": "rm -rf dist",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.4.0",
+    "vitest": "^3.0.0"
+  }
+}
