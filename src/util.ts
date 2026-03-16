@@ -15,7 +15,8 @@ export function bound01(value: number | string, max: number): number {
   }
 
   const isPercent = isPercentage(value);
-  value = Math.min(max, Math.max(0, parseFloat(String(value))));
+  const parsed = parseFloat(String(value));
+  value = isNaN(parsed) ? 0 : Math.min(max, Math.max(0, parsed));
 
   // Automatically convert percentage into number
   if (isPercent) {
@@ -40,13 +41,18 @@ export function pad2(str: string): string {
 
 /**
  * Convert n to percentage if it isn't already.
- * If n is already a percentage string, return it; otherwise convert 0–1 to "x%".
+ * Values <= 1 are treated as ratios and converted to percentage strings.
+ * Values > 1 are left unchanged (already absolute).
+ * Percentage strings are returned as-is.
  */
 export function convertToPercentage(n: number | string): number | string {
   if (typeof n === "string" && n.indexOf("%") !== -1) {
     return n;
   }
-  return Number(n) * 100 + "%";
+  if (Number(n) <= 1) {
+    return Number(n) * 100 + "%";
+  }
+  return n;
 }
 
 /**

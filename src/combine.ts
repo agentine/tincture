@@ -82,9 +82,7 @@ export function monochromatic(
         b: rgb.b * 255,
       }).setAlpha(hsv.a),
     );
-    // Cycle value, wrapping saturation
     v = (v + modification) % 1;
-    s = (s + modification) % 1;
   }
 
   return ret;

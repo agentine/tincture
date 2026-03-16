@@ -1,4 +1,4 @@
-import { bound01, boundAlpha, isPercentage } from "./util.js";
+import { bound01, boundAlpha, convertToPercentage, isPercentage } from "./util.js";
 import { names } from "./names.js";
 import { hslToRgb, hsvToRgb } from "./convert.js";
 
@@ -146,8 +146,8 @@ export function parseColor(input: ColorInput): ParsedColor {
   if ((match = regex.hsl.exec(str))) {
     const rgb = hslToRgb(
       bound01(match[1]!, 360) * 360,
-      bound01(match[2]!, 100),
-      bound01(match[3]!, 100),
+      bound01(convertToPercentage(match[2]!), 100),
+      bound01(convertToPercentage(match[3]!), 100),
     );
     return {
       r: rgb.r * 255,
@@ -162,8 +162,8 @@ export function parseColor(input: ColorInput): ParsedColor {
   if ((match = regex.hsla.exec(str))) {
     const rgb = hslToRgb(
       bound01(match[1]!, 360) * 360,
-      bound01(match[2]!, 100),
-      bound01(match[3]!, 100),
+      bound01(convertToPercentage(match[2]!), 100),
+      bound01(convertToPercentage(match[3]!), 100),
     );
     return {
       r: rgb.r * 255,
@@ -178,8 +178,8 @@ export function parseColor(input: ColorInput): ParsedColor {
   if ((match = regex.hsv.exec(str))) {
     const rgb = hsvToRgb(
       bound01(match[1]!, 360) * 360,
-      bound01(match[2]!, 100),
-      bound01(match[3]!, 100),
+      bound01(convertToPercentage(match[2]!), 100),
+      bound01(convertToPercentage(match[3]!), 100),
     );
     return {
       r: rgb.r * 255,
@@ -194,8 +194,8 @@ export function parseColor(input: ColorInput): ParsedColor {
   if ((match = regex.hsva.exec(str))) {
     const rgb = hsvToRgb(
       bound01(match[1]!, 360) * 360,
-      bound01(match[2]!, 100),
-      bound01(match[3]!, 100),
+      bound01(convertToPercentage(match[2]!), 100),
+      bound01(convertToPercentage(match[3]!), 100),
     );
     return {
       r: rgb.r * 255,
@@ -283,8 +283,8 @@ function parseObject(input: RgbInput | HslInput | HsvInput): ParsedColor {
   // Check for HSL
   if ("l" in input) {
     const hslInput = input as HslInput;
-    const s = bound01(hslInput.s, 100);
-    const l = bound01(hslInput.l, 100);
+    const s = bound01(convertToPercentage(hslInput.s), 100);
+    const l = bound01(convertToPercentage(hslInput.l), 100);
     const h = bound01(hslInput.h, 360) * 360;
     const rgb = hslToRgb(h, s, l);
     return {
@@ -300,8 +300,8 @@ function parseObject(input: RgbInput | HslInput | HsvInput): ParsedColor {
   // Check for HSV
   if ("v" in input) {
     const hsvInput = input as HsvInput;
-    const s = bound01(hsvInput.s, 100);
-    const v = bound01(hsvInput.v, 100);
+    const s = bound01(convertToPercentage(hsvInput.s), 100);
+    const v = bound01(convertToPercentage(hsvInput.v), 100);
     const h = bound01(hsvInput.h, 360) * 360;
     const rgb = hsvToRgb(h, s, v);
     return {
@@ -322,10 +322,12 @@ function parseObject(input: RgbInput | HslInput | HsvInput): ParsedColor {
  */
 function parseIntFromPercent(val: number | string): number {
   if (typeof val === "number") {
-    return val;
+    return isNaN(val) ? 0 : val;
   }
   if (isPercentage(val)) {
-    return (parseFloat(val) / 100) * 255;
+    const n = parseFloat(val);
+    return isNaN(n) ? 0 : (n / 100) * 255;
   }
-  return parseFloat(val);
+  const n = parseFloat(val);
+  return isNaN(n) ? 0 : n;
 }
