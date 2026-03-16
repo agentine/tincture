@@ -7,6 +7,15 @@ import {
 } from "./convert.js";
 import { boundAlpha } from "./util.js";
 import { getHexNames } from "./names.js";
+import {
+  lighten as _lighten,
+  brighten as _brighten,
+  darken as _darken,
+  saturate as _saturate,
+  desaturate as _desaturate,
+  greyscale as _greyscale,
+  spin as _spin,
+} from "./modify.js";
 
 export class TinctureColor {
   private _originalInput: ColorInput;
@@ -216,6 +225,36 @@ export class TinctureColor {
         // Default: use hex if fully opaque, rgba otherwise
         return this._a < 1 ? this.toRgbString() : this.toHexString();
     }
+  }
+
+  // ---- Modification Methods ----
+
+  lighten(amount = 10): TinctureColor {
+    return _lighten(this, amount);
+  }
+
+  brighten(amount = 10): TinctureColor {
+    return _brighten(this, amount);
+  }
+
+  darken(amount = 10): TinctureColor {
+    return _darken(this, amount);
+  }
+
+  saturate(amount = 10): TinctureColor {
+    return _saturate(this, amount);
+  }
+
+  desaturate(amount = 10): TinctureColor {
+    return _desaturate(this, amount);
+  }
+
+  greyscale(): TinctureColor {
+    return _greyscale(this);
+  }
+
+  spin(amount: number): TinctureColor {
+    return _spin(this, amount);
   }
 
   // ---- Clone ----
