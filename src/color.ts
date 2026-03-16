@@ -16,6 +16,14 @@ import {
   greyscale as _greyscale,
   spin as _spin,
 } from "./modify.js";
+import {
+  complement as _complement,
+  splitcomplement as _splitcomplement,
+  triad as _triad,
+  tetrad as _tetrad,
+  analogous as _analogous,
+  monochromatic as _monochromatic,
+} from "./combine.js";
 
 export class TinctureColor {
   private _originalInput: ColorInput;
@@ -255,6 +263,32 @@ export class TinctureColor {
 
   spin(amount: number): TinctureColor {
     return _spin(this, amount);
+  }
+
+  // ---- Combination Methods ----
+
+  complement(): TinctureColor {
+    return _complement(this);
+  }
+
+  splitcomplement(): TinctureColor[] {
+    return _splitcomplement(this);
+  }
+
+  triad(): TinctureColor[] {
+    return _triad(this);
+  }
+
+  tetrad(): TinctureColor[] {
+    return _tetrad(this);
+  }
+
+  analogous(results = 6, slices = 30): TinctureColor[] {
+    return _analogous(this, results, slices);
+  }
+
+  monochromatic(results = 6): TinctureColor[] {
+    return _monochromatic(this, results);
   }
 
   // ---- Clone ----

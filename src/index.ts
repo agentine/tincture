@@ -1,5 +1,6 @@
 import { TinctureColor } from "./color.js";
 import { bound01 } from "./util.js";
+import { mix as _mix } from "./combine.js";
 import type { ColorInput } from "./parse.js";
 
 export type { ColorInput, ColorFormat } from "./parse.js";
@@ -10,6 +11,7 @@ export interface TinctureStatic {
   fromRatio(input: { r: number | string; g: number | string; b: number | string; a?: number | string }): TinctureColor;
   equals(color1: ColorInput, color2: ColorInput): boolean;
   random(): TinctureColor;
+  mix(color1: ColorInput, color2: ColorInput, amount?: number): TinctureColor;
 }
 
 function tinctureFactory(input?: ColorInput): TinctureColor {
@@ -42,6 +44,14 @@ tinctureFactory.random = function random(): TinctureColor {
     g: Math.floor(Math.random() * 256),
     b: Math.floor(Math.random() * 256),
   });
+};
+
+tinctureFactory.mix = function mix(
+  color1: ColorInput,
+  color2: ColorInput,
+  amount = 50,
+): TinctureColor {
+  return _mix(new TinctureColor(color1), new TinctureColor(color2), amount);
 };
 
 export const tincture: TinctureStatic = tinctureFactory as TinctureStatic;
