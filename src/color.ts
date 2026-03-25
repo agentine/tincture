@@ -26,7 +26,7 @@ import {
 } from "./combine.js";
 
 export class TinctureColor {
-  private _originalInput: ColorInput;
+  private _originalInput: ColorInput | TinctureColor;
   private _r: number; // 0–255
   private _g: number; // 0–255
   private _b: number; // 0–255
@@ -35,8 +35,18 @@ export class TinctureColor {
   private _ok: boolean;
   private _roundA: number;
 
-  constructor(input: ColorInput = "") {
+  constructor(input: ColorInput | TinctureColor = "") {
     this._originalInput = input;
+    if (input instanceof TinctureColor) {
+      this._r = input._r;
+      this._g = input._g;
+      this._b = input._b;
+      this._a = input._a;
+      this._format = input._format;
+      this._ok = input._ok;
+      this._roundA = input._roundA;
+      return;
+    }
     const parsed = parseColor(input);
     this._r = parsed.r;
     this._g = parsed.g;
@@ -57,7 +67,7 @@ export class TinctureColor {
     return this._format;
   }
 
-  getOriginalInput(): ColorInput {
+  getOriginalInput(): ColorInput | TinctureColor {
     return this._originalInput;
   }
 

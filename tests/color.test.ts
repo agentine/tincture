@@ -47,6 +47,32 @@ describe("tincture() constructor", () => {
     const c = tincture();
     expect(c.isValid()).toBe(false);
   });
+
+  it("creates from another TinctureColor instance", () => {
+    const c1 = new TinctureColor("red");
+    const c2 = new TinctureColor(c1);
+    expect(c2.isValid()).toBe(true);
+    expect(c2.toHex()).toBe("ff0000");
+    expect(c2.toRgb()).toEqual({ r: 255, g: 0, b: 0, a: 1 });
+    expect(c2.getFormat()).toBe("name");
+  });
+
+  it("creates from TinctureColor with alpha", () => {
+    const c1 = new TinctureColor("red");
+    c1.setAlpha(0.5);
+    const c2 = new TinctureColor(c1);
+    expect(c2.isValid()).toBe(true);
+    expect(c2.getAlpha()).toBe(0.5);
+    expect(c2.toHex()).toBe("ff0000");
+  });
+
+  it("creates independent copy from TinctureColor instance", () => {
+    const c1 = new TinctureColor("#00ff00");
+    const c2 = new TinctureColor(c1);
+    c2.setAlpha(0.3);
+    expect(c1.getAlpha()).toBe(1);
+    expect(c2.getAlpha()).toBe(0.3);
+  });
 });
 
 describe("TinctureColor properties", () => {
